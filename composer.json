@@ -1,0 +1,15 @@
+{
+    "name": "Opsway/Pipeliner",
+    "license": "BSD-3-Clause",
+    "type": "magento-module",
+    "homepage":"https://github.com/opsway/magento-mod-pipeliner",
+    "description": "Syncronization with PipelinerSales CRM",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "authors":[
+        {
+            "name":"OpsWay"
+        }
+    ]
+}

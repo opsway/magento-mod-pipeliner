@@ -1,0 +1,3 @@
+src/app/code/community/Opsway/Pipeliner     app/code/community/Opsway/Pipeliner
+src/app/etc/modules/*    app/etc/modules/
+src/app/etc/lib/*   app/etc/lib/
