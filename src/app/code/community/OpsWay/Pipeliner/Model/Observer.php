@@ -249,7 +249,6 @@ class OpsWay_Pipeliner_Model_Observer
             foreach ($accountIterator as $account) {
                 $_product = getProductByPipelinerId($account->getId());
                 if ($_product->getId()) {
-                    echo "exists \r\n";
                     $product = Mage::getModel('catalog/product')->load($_product->getId());
                     $_category = getCategoryByPipelinerId($account->getProductCategoryId());
                     $product->setStoreId(1)
@@ -264,7 +263,6 @@ class OpsWay_Pipeliner_Model_Observer
                     $product->save();
                     unset($product);
                 } else {
-                    echo "not exists \r\n";
                     $product = Mage::getModel('catalog/product');
                     $_category = getCategoryByPipelinerId($account->getProductCategoryId());
                     $product->setStoreId(1)

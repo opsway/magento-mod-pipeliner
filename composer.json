@@ -1,5 +1,5 @@
 {
-    "name": "Opsway/Pipeliner",
+    "name": "opsway/magento-pipeliner",
     "license": "BSD-3-Clause",
     "type": "magento-module",
     "homepage":"https://github.com/opsway/magento-mod-pipeliner",
