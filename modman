@@ -1,3 +1,3 @@
 src/app/code/community/OpsWay/Pipeliner     app/code/community/OpsWay/Pipeliner
 src/app/etc/modules/*    app/etc/modules/
-src/app/lib/*   app/lib/
+src/lib/*   lib/
