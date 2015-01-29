@@ -21,6 +21,18 @@
                 <class>OpsWay_Pipeliner_Helper</class>
             </pipeliner>
         </helpers>
+
+        <blocks>
+            <pipeliner>
+                <class>OpsWay_Pipeliner_Block</class>
+            </pipeliner>
+            <adminhtml>
+                <rewrite>
+                    <system_config_form_fieldset>OpsWay_Pipeliner_Block_Adminhtml_Info</system_config_form_fieldset>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+
         <resources>
             <add_category_attribute>
                 <setup>
