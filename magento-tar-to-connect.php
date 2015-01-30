@@ -13,11 +13,11 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 date_default_timezone_set('America/Los_Angeles');
 
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Helper/File.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Interface.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Abstract.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Archive/Tar.php';
-require_once dirname(__FILE__) . '/'. 'src/magento/downloader/lib/Mage/Exception.php';
+require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Helper/File.php';
+require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Interface.php';
+require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Abstract.php';
+require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Tar.php';
+require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Exception.php';
 
 /**
 * Still a lot of Magento users stuck on systems with 5.2, no no namespaces
@@ -306,13 +306,13 @@ class Pulsestorm_MagentoTarToConnect
         ###--------------------------------------------------
         
         # copy and extract archive               
-        shell_exec('cp '        . $base_dir . '/' . $archive_files . ' ' . $temp_dir);
-        if(preg_match('/\.zip$/', $archive_files)) {
+        shell_exec('cp '        . $base_dir . '/' . $archive_files . '/* ' . $temp_dir.'/*');
+        /*if(preg_match('/\.zip$/', $archive_files)) {
             shell_exec('unzip -o '  . $temp_dir . '/' . $archive_files);
         } else {
             shell_exec('tar -xvf '  . $temp_dir . '/' . $archive_files);
         }
-        shell_exec('rm '        . $temp_dir . '/' . $archive_files);
+        shell_exec('rm '        . $temp_dir . '/' . $archive_files);*/
         ###--------------------------------------------------
         
         # get a lsit of all the files without directories
@@ -351,7 +351,7 @@ class Pulsestorm_MagentoTarToConnect
             mkdir($path_output, 0777, true);
         }
         ###--------------------------------------------------
-        
+        $archive_files = $config['extension_name'] . '.tar';
         # use Magento architve to tar up the files
         $archiver = new Mage_Archive_Tar;
         $archiver->pack($temp_dir,$path_output.'/'.$archive_files,true);
