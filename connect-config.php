@@ -56,8 +56,8 @@ return array(
 
 //The base_dir and archive_file path are combined to point to your tar archive
 //The basic idea is a seperate process builds the tar file, then this finds it
-'base_dir'               => './var/build',
-'archive_files'          => 'OpsWay_Pipeliner.tar',
+'base_dir'               => './',
+'archive_files'          => 'vendor/opsway/magento-pipeliner/src',
 
 //The Magento Connect extension name.  Must be unique on Magento Connect
 //Has no relation to your code module name.  Will be the Connect extension name
