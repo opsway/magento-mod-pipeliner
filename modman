@@ -1,3 +1,5 @@
 src/app/code/community/OpsWay/Pipeliner     app/code/community/OpsWay/Pipeliner
 src/app/etc/modules/*    app/etc/modules/
 src/lib/*   lib/
+magento-tar-to-connect.php magento-tar-to-connect.php
+connect-config.php connect-config.php
