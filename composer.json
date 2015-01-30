@@ -1,6 +1,6 @@
 {
     "name": "opsway/magento-pipeliner",
-    "license": "BSD-3-Clause",
+    "license": "GPL",
     "type": "magento-module",
     "homepage":"https://github.com/opsway/magento-mod-pipeliner",
     "description": "Syncronization with PipelinerSales CRM",
@@ -9,7 +9,11 @@
     },
     "authors":[
         {
-            "name":"OpsWay"
+            "name":"OpsWay",
+            "email": "support@opsway.com"
         }
-    ]
+    ],
+    "replace": {
+        "connect20/opswaypipeliner": "*"
+    }
 }
