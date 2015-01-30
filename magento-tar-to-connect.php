@@ -13,11 +13,11 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 date_default_timezone_set('America/Los_Angeles');
 
-require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Helper/File.php';
-require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Interface.php';
-require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Abstract.php';
-require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Archive/Tar.php';
-require_once dirname(__FILE__) . '/'. 'downloader/lib/Mage/Exception.php';
+require_once './'. 'downloader/lib/Mage/Archive/Helper/File.php';
+require_once './'. 'downloader/lib/Mage/Archive/Interface.php';
+require_once './'. 'downloader/lib/Mage/Archive/Abstract.php';
+require_once './'. 'downloader/lib/Mage/Archive/Tar.php';
+require_once './'. 'downloader/lib/Mage/Exception.php';
 
 /**
 * Still a lot of Magento users stuck on systems with 5.2, no no namespaces
@@ -306,7 +306,7 @@ class Pulsestorm_MagentoTarToConnect
         ###--------------------------------------------------
         
         # copy and extract archive               
-        shell_exec('cp '        . $base_dir . '/' . $archive_files . '/* ' . $temp_dir.'/*');
+        shell_exec('cp -Rf '        . $base_dir . '/' . $archive_files . '/* ' . $temp_dir.'/');
         /*if(preg_match('/\.zip$/', $archive_files)) {
             shell_exec('unzip -o '  . $temp_dir . '/' . $archive_files);
         } else {
