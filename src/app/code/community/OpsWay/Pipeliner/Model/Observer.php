@@ -21,7 +21,7 @@ class OpsWay_Pipeliner_Model_Observer
             $_cat = Mage::getModel('catalog/category')->load($cats[count($cats) - 1]);
             $pipeliner = Mage::helper('pipeliner')->getConnection();
 
-            $products = $pipeliner->products->get(PipelinerSales_Query_Filter::equals('SKU', $_product->getSku()));
+            $products = $pipeliner->products->get(PipelinerSales_Query_Filter::equals('ID', $_product->getData('pipeliner_api_id')));
             $accountIterator = $pipeliner->products->getEntireRangeIterator($products);
             foreach ($accountIterator as $account) {
                 $sku = $account->getId();
@@ -31,13 +31,13 @@ class OpsWay_Pipeliner_Model_Observer
             } else {
                 $products = $pipeliner->products->getById($sku);
             }
-            $observer->getProduct()->setData('pipeliner_api_id', $products->getId());
             $products->setDescription($_product->getDescription());
             $products->setName($_product->getName());
             $products->setSku($_product->getSku());
             $products->setProductCategoryId($_cat->getData('pipeliner_api_id'));
             $products->setUnitSymbol('ps');
             $pipeliner->products->save($products);
+            $observer->getProduct()->setData('pipeliner_api_id', $products->getId());
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
@@ -60,8 +60,8 @@ class OpsWay_Pipeliner_Model_Observer
             $pipeliner = Mage::helper('pipeliner')->getConnection();
 
             $filter = new PipelinerSales_Query_Filter();
-            $filter->equals('NAME', $categoryString);
-            if ($_cat->getParentCategory()->getId() != 2) {
+            $filter->equals('ID', $_cat->getData('pipeliner_api_id'));
+            if ($_cat->getParentCategory()->getId() != 1) {
                 $filter->equals('PARENT_ID', $_cat->getParentCategory()->getData('pipeliner_api_id'));
             }
 
@@ -77,12 +77,12 @@ class OpsWay_Pipeliner_Model_Observer
                 $categories = $pipeliner->productCategories->getById($categoryId);
             }
 
-            $observer->getCategory()->setData('pipeliner_api_id', $categories->getId());
 
             $categories->setName($categoryString);
             if ($_cat->getParentCategory()->getId() != 2)
                 $categories->setParentId($_cat->getParentCategory()->getData('pipeliner_api_id'));
             $pipeliner->productCategories->save($categories);
+            $observer->getCategory()->setData('pipeliner_api_id', $categories->getId());
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
@@ -95,13 +95,13 @@ class OpsWay_Pipeliner_Model_Observer
      * @param Varien_Event_Observer $observer
      * @return $this
      */
-    public function saveCustomerAfterCommit(Varien_Event_Observer $observer)
+    public function saveCustomerBeforeCommit(Varien_Event_Observer $observer)
     {
         try {
             $_customer = $observer->getCustomer();
 
             $pipeliner = Mage::helper('pipeliner')->getConnection();
-            $contacts = $pipeliner->contacts->get(PipelinerSales_Query_Filter::equals('EMAIL1', $_customer->getEmail()));
+            $contacts = $pipeliner->contacts->get(PipelinerSales_Query_Filter::equals('ID', $_customersetData('pipeliner_api_id')));
             $accountIterator = $pipeliner->contacts->getEntireRangeIterator($contacts);
             foreach ($accountIterator as $account) {
                 $id = $account->getId();
@@ -120,6 +120,7 @@ class OpsWay_Pipeliner_Model_Observer
             $contacts->setOwnerId($this->getOwnerId($pipeliner));
             $contacts->setSalesUnitId(self::COMPANY_SALES_UNIT);
             $pipeliner->contacts->save($contacts);
+            $observer->getCustomer()->setData('pipeliner_api_id', $contacts->getId());
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
