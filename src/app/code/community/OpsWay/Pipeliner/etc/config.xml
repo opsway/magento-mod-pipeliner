@@ -93,38 +93,15 @@
             </add_customer_attribute_read>
         </resources>
         <events>
-            <catalog_category_save_before>
+            <model_save_before>
                 <observers>
                     <pipeliner_events>
+                        <type>singleton</type>
                         <class>OpsWay_Pipeliner_Model_Observer</class>
-                        <method>saveCatalogCategoryBefore</method>
+                        <method>modelSaveAfter</method>
                     </pipeliner_events>
                 </observers>
-            </catalog_category_save_before>
-            <catalog_product_save_before>>
-                <observers>
-                    <pipeliner_events>
-                        <class>OpsWay_Pipeliner_Model_Observer</class>
-                        <method>saveCatalogProductBefore</method>
-                    </pipeliner_events>
-                </observers>
-            </catalog_product_save_before>>
-            <customer_save_commit_before>
-                <observers>
-                    <pipeliner_events>
-                        <class>OpsWay_Pipeliner_Model_Observer</class>
-                        <method>saveCustomerBeforeCommit</method>
-                    </pipeliner_events>
-                </observers>
-            </customer_save_commit_before>
-            <sales_order_save_after>
-                <observers>
-                    <pipeliner_events>
-                        <class>OpsWay_Pipeliner_Model_Observer</class>
-                        <method>saveOrderAfterCommit</method>
-                    </pipeliner_events>
-                </observers>
-            </sales_order_save_after>
+            </model_save_before>
         </events>
     </global>
     <crontab>

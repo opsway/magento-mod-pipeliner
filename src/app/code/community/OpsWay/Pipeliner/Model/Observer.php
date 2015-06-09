@@ -4,7 +4,13 @@ class OpsWay_Pipeliner_Model_Observer
 {
     const PIPELINER_ROLLOUT_STAGE = 'PY-7FFFFFFF-363E1EB8-B973-46AF-BBFD-DD3CDF3C4BBC';
     const COMPANY_SALES_UNIT = '0';
-
+	
+	private $methods = array(
+		'Mage_Catalog_Model_Category'	=>	'saveCatalogCategoryBefore',
+		'Mage_Catalog_Model_Product'	=>	'saveCatalogProductBefore',
+		'Mage_Customer_Model_Customer'	=>	'saveCustomerBeforeCommit'
+	);
+	
     /**
      *
      * @throws Exception
@@ -14,7 +20,7 @@ class OpsWay_Pipeliner_Model_Observer
     public function saveCatalogProductBefore(Varien_Event_Observer $observer)
     {
         try {
-            $_product = $observer->getProduct();
+            $_product = $observer->getEvent()->getObject();
 
             $cats = $_product->getCategoryIds();
             $categoryArray = array();
@@ -53,16 +59,14 @@ class OpsWay_Pipeliner_Model_Observer
     public function saveCatalogCategoryBefore(Varien_Event_Observer $observer)
     {
         try {
-            $_category = $observer->getCategory();
-            $_cat = Mage::getModel('catalog/category')->load($_category->getId());
-            $categoryString = $_cat->getName();
-
+            $_category = $observer->getEvent()->getObject();
+            $categoryString = $_category->getName();
             $pipeliner = Mage::helper('pipeliner')->getConnection();
 
             $filter = new PipelinerSales_Query_Filter();
-            $filter->equals('ID', $_cat->getData('pipeliner_api_id'));
-            if ($_cat->getParentCategory()->getId() != 1) {
-                $filter->equals('PARENT_ID', $_cat->getParentCategory()->getData('pipeliner_api_id'));
+            $filter->equals('ID', $_category->getData('pipeliner_api_id'));
+            if ($_category->getParentCategory()->getId() != 1) {
+                $filter->equals('PARENT_ID', $_category->getParentCategory()->getData('pipeliner_api_id'));
             }
 
             $categories = $pipeliner->productCategories->get($filter);
@@ -79,10 +83,10 @@ class OpsWay_Pipeliner_Model_Observer
 
 
             $categories->setName($categoryString);
-            if ($_cat->getParentCategory()->getId() != 2)
-                $categories->setParentId($_cat->getParentCategory()->getData('pipeliner_api_id'));
+            if ($_category->getParentCategory()->getId() != 2)
+                $categories->setParentId($_category->getParentCategory()->getData('pipeliner_api_id'));
             $pipeliner->productCategories->save($categories);
-            $observer->getCategory()->setData('pipeliner_api_id', $categories->getId());
+            $observer->getEvent()->getObject()->setData('pipeliner_api_id', $categories->getId());
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
@@ -317,4 +321,14 @@ class OpsWay_Pipeliner_Model_Observer
             return $account->getId();
         }
     }
+	
+	public function modelSaveAfter(Varien_Event_Observer $observer)
+	{
+		echo get_class($observer->getEvent()->getObject());die;
+		if(isset($this->methods[get_class($observer->getEvent()->getObject())]))
+		{
+			$method = $this->methods[get_class($observer->getEvent()->getObject())];
+			$this->$method($observer);
+		}
+	}
 }
