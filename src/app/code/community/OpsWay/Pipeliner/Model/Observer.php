@@ -102,10 +102,11 @@ class OpsWay_Pipeliner_Model_Observer
     public function saveCustomerBeforeCommit(Varien_Event_Observer $observer)
     {
         try {
-            $_customer = $observer->getCustomer();
-
+            $_customer = $observer->getEvent()->getObject();
+			
+			
             $pipeliner = Mage::helper('pipeliner')->getConnection();
-            $contacts = $pipeliner->contacts->get(PipelinerSales_Query_Filter::equals('ID', $_customersetData('pipeliner_api_id')));
+            $contacts = $pipeliner->contacts->get(PipelinerSales_Query_Filter::equals('ID', $_customer->getData('pipeliner_api_id')));
             $accountIterator = $pipeliner->contacts->getEntireRangeIterator($contacts);
             foreach ($accountIterator as $account) {
                 $id = $account->getId();
@@ -116,7 +117,8 @@ class OpsWay_Pipeliner_Model_Observer
                 $contacts = $pipeliner->contacts->getById($id);
             }
 
-            $contacts->setEmail1($_customer->getEmail());
+            
+			$contacts->setEmail1($_customer->getEmail());
             $contacts->setFirstName($_customer->getFirstname());
             $contacts->setSurname($_customer->getLastname());
             $contacts->setGender($_customer->getGender());
@@ -124,7 +126,7 @@ class OpsWay_Pipeliner_Model_Observer
             $contacts->setOwnerId($this->getOwnerId($pipeliner));
             $contacts->setSalesUnitId(self::COMPANY_SALES_UNIT);
             $pipeliner->contacts->save($contacts);
-            $observer->getCustomer()->setData('pipeliner_api_id', $contacts->getId());
+            $observer->getEvent()->getObject()->setData('pipeliner_api_id', $contacts->getId());
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
@@ -324,7 +326,7 @@ class OpsWay_Pipeliner_Model_Observer
 	
 	public function modelSaveAfter(Varien_Event_Observer $observer)
 	{
-		echo get_class($observer->getEvent()->getObject());die;
+		//echo get_class($observer->getEvent()->getObject());
 		if(isset($this->methods[get_class($observer->getEvent()->getObject())]))
 		{
 			$method = $this->methods[get_class($observer->getEvent()->getObject())];
