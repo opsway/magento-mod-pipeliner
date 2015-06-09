@@ -8,7 +8,8 @@ class OpsWay_Pipeliner_Model_Observer
 	private $methods = array(
 		'Mage_Catalog_Model_Category'	=>	'saveCatalogCategoryBefore',
 		'Mage_Catalog_Model_Product'	=>	'saveCatalogProductBefore',
-		'Mage_Customer_Model_Customer'	=>	'saveCustomerBeforeCommit'
+		'Mage_Customer_Model_Customer'	=>	'saveCustomerBeforeCommit',
+		'Mage_Sales_Model_Order'		=>	'saveOrderAfterCommit'
 	);
 	
     /**
@@ -142,8 +143,7 @@ class OpsWay_Pipeliner_Model_Observer
      */
     public function saveOrderAfterCommit(Varien_Event_Observer $observer)
     {
-
-        $_order = $observer->getOrder();
+        $_order = $observer->getEvent()->getObject();
 
         try {
             $pipeliner = Mage::helper('pipeliner')->getConnection();
@@ -326,7 +326,6 @@ class OpsWay_Pipeliner_Model_Observer
 	
 	public function modelSaveAfter(Varien_Event_Observer $observer)
 	{
-		//echo get_class($observer->getEvent()->getObject());
 		if(isset($this->methods[get_class($observer->getEvent()->getObject())]))
 		{
 			$method = $this->methods[get_class($observer->getEvent()->getObject())];
