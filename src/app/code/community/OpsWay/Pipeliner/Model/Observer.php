@@ -200,7 +200,15 @@ class OpsWay_Pipeliner_Model_Observer
                 $opptyProductRelations->setQuantity($item->getSimpleQtyToShip());
                 $pipeliner->opptyProductRelations->save($opptyProductRelations);
             }
-
+			
+			$messages = $pipeliner->messages->create();
+			$messages->setAddressbookId($contactId);
+			$messages->setDelegatedClientId($this->getOwnerId($pipeliner));
+			$messages->setOwnerId($this->getOwnerId($pipeliner));
+			$messages->setOpptyId($this->getOwnerId($opportunityId));
+			$messages->setSubject('Order number #'.$_order->getIncrementId());
+			$pipeliner->messages->save($messages);
+			
         } catch (PipelinerSales_Http_PipelinerHttpException $e) {
             Mage::log($e->getErrorMessage(), null, 'pipeliner.log');
         }
